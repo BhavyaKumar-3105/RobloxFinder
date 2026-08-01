@@ -13,16 +13,21 @@ export async function handler(event, context) {
   }
 
   try {
-    const robloxUrl = `https://apis.roblox.com/search-api/omni-search?searchQuery=${encodeURIComponent(query)}&pageType=all`;
+    // Route through RoProxy to bypass datacenter IP rate-limits (429)
+    const robloxUrl = `https://games.roproxy.com/v1/games/list?keyword=${encodeURIComponent(query)}&maxRows=20`;
 
     const response = await fetch(robloxUrl, {
       method: "GET",
-      headers: { "Accept": "application/json" },
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "Accept": "application/json",
+      },
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`Roblox API Error [${response.status}]:`, errorText);
+      console.error(`RoProxy API Error [${response.status}]:`, errorText);
+
       return {
         statusCode: response.status,
         headers: {
@@ -30,7 +35,7 @@ export async function handler(event, context) {
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-          error: `Roblox API responded with status ${response.status}`,
+          error: `Roblox proxy responded with status ${response.status}`,
           details: errorText,
         }),
       };
@@ -48,6 +53,7 @@ export async function handler(event, context) {
     };
   } catch (error) {
     console.error("Serverless execution exception:", error);
+
     return {
       statusCode: 500,
       headers: {
@@ -55,7 +61,7 @@ export async function handler(event, context) {
         "Access-Control-Allow-Origin": "*",
       },
       body: JSON.stringify({
-        error: "Failed to connect to Roblox API",
+        error: "Failed to connect to Roblox API via proxy",
         message: error.message,
       }),
     };
