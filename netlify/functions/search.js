@@ -13,8 +13,8 @@ export async function handler(event, context) {
   }
 
   try {
-    // Official Roblox search endpoint
-    const robloxUrl = `https://games.roblox.com/v1/games/list?model.keyword=${encodeURIComponent(query)}&model.maxRows=20`;
+    // Correct Roblox API search endpoint
+    const robloxUrl = `https://games.roblox.com/v1/games/list?keyword=${encodeURIComponent(query)}`;
 
     const response = await fetch(robloxUrl, {
       method: "GET",
