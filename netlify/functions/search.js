@@ -10,8 +10,8 @@ exports.handler = async (event, context) => {
   }
 
   try {
-    // Official Roblox search API endpoint
-    const robloxUrl = `https://games.roblox.com/v1/games/list?model.keyword=${encodeURIComponent(query)}&model.maxRows=20`;
+    // Official Roblox discovery search endpoint
+    const robloxUrl = `https://games.roblox.com/v1/games/list?model.keyword=${encodeURIComponent(query)}&model.maxRows=10`;
 
     const response = await fetch(robloxUrl, {
       headers: {
@@ -20,12 +20,13 @@ exports.handler = async (event, context) => {
       },
     });
 
+    // Fallback response handling
     if (!response.ok) {
-      console.error(`Roblox API HTTP Error: ${response.status}`);
+      console.error("Roblox returned status:", response.status);
       return {
         statusCode: response.status,
         headers: { "Access-Control-Allow-Origin": "*" },
-        body: JSON.stringify({ error: `Roblox API responded with status ${response.status}` }),
+        body: JSON.stringify({ error: `Roblox API HTTP ${response.status}` }),
       };
     }
 
@@ -40,11 +41,11 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(data),
     };
   } catch (error) {
-    console.error("Error in serverless function:", error);
+    console.error("Serverless execution error:", error);
     return {
       statusCode: 500,
       headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ error: "Failed to fetch data from Roblox API", details: error.message }),
+      body: JSON.stringify({ error: "Failed to query Roblox API", details: error.message }),
     };
   }
 };
