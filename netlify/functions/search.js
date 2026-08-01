@@ -13,21 +13,19 @@ export async function handler(event, context) {
   }
 
   try {
-    // Route through RoProxy to bypass datacenter IP rate-limits (429)
-    const robloxUrl = `https://games.roproxy.com/v1/games/list?keyword=${encodeURIComponent(query)}&maxRows=20`;
+    // apis.roblox.com/search-api/omni-search is the live endpoint Roblox's own
+    // site uses for game search. Routed through RoProxy since Netlify's
+    // datacenter IPs get rate-limited (429) hitting Roblox directly.
+    const robloxUrl = `https://apis.roproxy.com/search-api/omni-search?searchQuery=${encodeURIComponent(query)}&pageType=all`;
 
     const response = await fetch(robloxUrl, {
       method: "GET",
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Accept": "application/json",
-      },
+      headers: { "Accept": "application/json" },
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`RoProxy API Error [${response.status}]:`, errorText);
-
+      console.error(`Roblox API Error [${response.status}]:`, errorText);
       return {
         statusCode: response.status,
         headers: {
@@ -35,7 +33,7 @@ export async function handler(event, context) {
           "Access-Control-Allow-Origin": "*",
         },
         body: JSON.stringify({
-          error: `Roblox proxy responded with status ${response.status}`,
+          error: `Roblox API responded with status ${response.status}`,
           details: errorText,
         }),
       };
@@ -53,7 +51,6 @@ export async function handler(event, context) {
     };
   } catch (error) {
     console.error("Serverless execution exception:", error);
-
     return {
       statusCode: 500,
       headers: {
