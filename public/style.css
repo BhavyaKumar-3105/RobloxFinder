@@ -1,0 +1,108 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background-color: #0f1115;
+  color: #ffffff;
+  padding: 2rem 1rem;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  color: #00a2ff;
+}
+
+.search-box {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+input {
+  width: 70%;
+  max-width: 400px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #2a2e39;
+  background-color: #1a1d24;
+  color: #fff;
+  font-size: 1rem;
+}
+
+button {
+  padding: 12px 24px;
+  border-radius: 8px;
+  border: none;
+  background-color: #00a2ff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0082cc;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 1.5rem;
+}
+
+.game-card {
+  background-color: #1a1d24;
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #2a2e39;
+}
+
+.game-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.game-meta {
+  font-size: 0.9rem;
+  color: #a0a5b5;
+  margin-bottom: 12px;
+}
+
+.play-link {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  background-color: #252934;
+  color: #00a2ff;
+  padding: 8px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.play-link:hover {
+  background-color: #2e3342;
+}
+
+#statusMessage {
+  text-align: center;
+  color: #a0a5b5;
+  font-size: 1.1rem;
+}
