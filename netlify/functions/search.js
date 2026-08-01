@@ -13,21 +13,16 @@ export async function handler(event, context) {
   }
 
   try {
-    // Correct Roblox API search endpoint
-    const robloxUrl = `https://games.roblox.com/v1/games/list?keyword=${encodeURIComponent(query)}`;
+    const robloxUrl = `https://apis.roblox.com/search-api/omni-search?searchQuery=${encodeURIComponent(query)}&pageType=all`;
 
     const response = await fetch(robloxUrl, {
       method: "GET",
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
-        "Accept": "application/json",
-      },
+      headers: { "Accept": "application/json" },
     });
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error(`Roblox API Error [${response.status}]:`, errorText);
-
       return {
         statusCode: response.status,
         headers: {
@@ -53,7 +48,6 @@ export async function handler(event, context) {
     };
   } catch (error) {
     console.error("Serverless execution exception:", error);
-
     return {
       statusCode: 500,
       headers: {
